@@ -1,103 +1,175 @@
+# ⛽ Fuel Invoices Management App  
+### (Desktop Application – PySide6 + SQLite + Secure Auth)  
 
-# Fuel-Invoices-Mangment-App
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python)](https://www.python.org/)
+[![PySide6](https://img.shields.io/badge/UI-PySide6-green?logo=qt)](https://doc.qt.io/qtforpython/)
+[![SQLite](https://img.shields.io/badge/Database-SQLite-lightgrey?logo=sqlite)](https://www.sqlite.org/)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/Version-v1.0-orange)]()
+[![Security](https://img.shields.io/badge/Security-Encrypted%20Passwords-success?logo=lock)]()
+![WhatsApp Image 2025-11-09 at 21 50 06_d6db834e](https://github.com/user-attachments/assets/be2ec551-1983-47d5-8977-48db04d185b1)
 
-Desktop application (PySide6) for managing fuel invoices: add, view, export, and audit. This repository includes a production-oriented scaffold, secure local authentication, persistent SQLite storage, and UI improvements inspired by modern UX practices.
+---
 
-## Contents
-- `app/` — application code (PySide6)
-- `app/assets/` — placeholder assets (replace with real images and animations)
-- `data/` — local SQLite DB will be created here (`invoices.db`)
-- `requirements.txt`
-- `README.md`
-- `.gitignore`
+## 🧭 Overview
 
-## Complete Version Timeline and Resolved Issues
+*Fuel Invoices Management App* is a desktop-based application built to manage, track, and audit fuel invoices efficiently.  
+Originally developed for *Concorp Petroleum, it enables smooth handling of invoice data with **secure local authentication, **persistent storage, and **modern UI/UX* powered by *PySide6*.
 
-### v0.1 — Prototype (Streamlit)
-- A very simple Streamlit-based interface for entering and displaying invoices.
-- Manual save/load of CSV/Excel files.
-- **Problems:** No persistent storage; all data was stored in-memory (Streamlit session) and was lost on reload or session end.
+Built for everyday operational reliability and long-term scalability.
 
-### v0.2 — UX Improvements (Streamlit)
-- Added filters and fields for price/quantity/total and a button to export to Excel.
-- **Problems:** The layout included a persistent sidebar that distracted users. There was no authentication, and financial calculations used floating-point arithmetic leading to inaccuracies.
+---
 
-### v0.3 — Persistence & Accuracy
-- Migrated to a persistent SQLite-based storage (`data/invoices.db`), replacing volatile session-only storage.
-- Replaced floating-point math with `decimal.Decimal` for correct financial calculations and set precision to 28 digits.
-- Implemented a bulk import workflow (Excel/CSV) with preview before committing.
-- **Resolved:** Data loss and arithmetic rounding errors.
+## 🧩 Key Features
 
-### v1.0 — Security Hardening & Desktop Migration (PySide6)
-- Migrated UI to PySide6 for a native desktop experience with better control over windows, modals, and transitions.
-- Implemented local authentication with a `users` table in SQLite and secure password hashing (PBKDF2-HMAC-SHA256 with salt and 200k iterations).
-- Enforced a password complexity policy (minimum length, upper/lower case, digits, special characters).
-- Added `audit_log` to record all critical events: CRUD operations, login attempts, imports/exports, and UI interactions for analytics.
-- Implemented a central login dialog with optional Lottie animation and a blurred refinery background (replace assets/refinery_bg.jpg).
-- Implemented modal-like invoice listing and nested preview windows, as well as PDF export support via ReportLab (optional, requires package).
-- UX polish: hide non-essential panels after login, show concise confirmations (toasts), and clear sensitive fields after use.
+✅ Add, edit, and view invoices  
+✅ Persistent *SQLite* database (auto-created invoices.db)  
+✅ Secure authentication with salted password hashing (*PBKDF2-HMAC-SHA256*)  
+✅ Audit logging for all critical user actions  
+✅ Excel and PDF export options  
+✅ Decimal-based arithmetic for precise financial calculations  
+✅ Clean, distraction-free UI with modal dialogs  
+✅ Cross-platform (Windows, macOS, Linux)  
 
-## Problems Encountered and their Solutions (detailed)
-1. **Volatile session data (streamlit)**
-   - Problem: data not persistent; lost after reload
-   - Fix: moved to SQLite with proper CRUD functions and persistent DB file.
+---
 
-2. **Floating-point rounding errors**
-   - Problem: inaccurate totals
-   - Fix: use `decimal.Decimal` for all monetary arithmetic and set `getcontext().prec = 28`.
+## 📂 Project Structure
 
-3. **Windows installation and PATH issues**
-   - Problem: PowerShell ExecutionPolicy and missing pip in PATH caused install friction
-   - Fix: documented venv activate commands and fallback `python -m pip install ...` approach.
+Fuel-Invoices-Mangment-App/
+│
+├── app/
+│   ├── main.py             # Application entry point
+│   ├── ui/                 # PySide6 UI components
+│   ├── database.py         # SQLite schema and CRUD logic
+│   ├── auth.py             # Authentication & user management
+│   ├── audit.py            # Audit logging system
+│   └── utils/              # Helpers & utility scripts
+│
+├── app/assets/             # Placeholder images, icons, animations
+├── data/                   # Local database storage
+│   └── invoices.db
+│
+├── requirements.txt
+├── LICENSE
+└── README.md
 
-4. **Optional packages failing (st_aggrid / streamlit-lottie)**
-   - Fix: made optional and created fallback behaviors for both Streamlit and Desktop flows.
+---
 
-5. **Plain-text passwords in prototype**
-   - Problem: major security flaw
-   - Fix: implemented salted hashed passwords with PBKDF2 and enforced policy checks.
+## 🚀 Installation & Setup
 
-6. **No audit trail for operations**
-   - Fix: audit_log table and logging on each critical path (insert/update/delete/login/export/ui events).
+1️⃣ *Clone the repository*
+```bash
+git clone https://github.com/AnasIDRIS98/Fuel-Invoices-Mangment-App.git
+cd Fuel-Invoices-Mangment-App
 
-## Future Development Plans (Roadmap)
-**Short term (1–3 months):**
-- Role-based access control (RBAC) and fine-grained permissions.
-- Undo/restore functionality and soft-deletes.
-- Unit tests for DB and business logic.
+2️⃣ Create and activate virtual environment
 
-**Mid term (3–6 months):**
-- Add a lightweight REST API (FastAPI) for integrations.
-- Scheduled encrypted backups for the DB file.
-- Improved PDF templates and per-client branding options.
+python -m venv .venv
 
-**Long term (6–12+ months):**
-- Enterprise SSO/LDAP integration and central user management.
-- Signed installers and cross-platform packaging (PyInstaller).
-- Cloud-sync (optional, encrypted) and collaboration features.
-- Analytics dashboard with scheduled reports.
+# Windows (PowerShell)
+.\.venv\Scripts\Activate.ps1
 
-## How to run
-1. Create venv and activate it:
-   ```bash
-   python -m venv .venv
-   # Windows (PowerShell)
-   .\.venv\Scripts\Activate.ps1
-   # or (CMD)
-   .venv\Scripts\activate
-   # Linux/macOS
-   source .venv/bin/activate
-   ```
-2. Install requirements:
-   ```bash
-   pip install --upgrade pip
-   pip install -r requirements.txt
-   ```
-3. Run the app:
-   ```bash
-   python app/main.py
-   ```
+# macOS/Linux
+source .venv/bin/activate
 
-## Security Notes
-- Do not commit `data/invoices.db` to public repositories.
-- Use encrypted backups for production data and consider using Postgres with encrypted volumes for production deployments.
+3️⃣ Install dependencies
+
+pip install --upgrade pip
+pip install -r requirements.txt
+
+4️⃣ Run the app
+
+python app/main.py
+
+💡 Note: The database (data/invoices.db) is automatically created on first launch.
+
+⸻
+
+🔐 Security Highlights
+	•	Password Hashing: PBKDF2-HMAC-SHA256 (200k iterations, unique salt)
+	•	Password Policy: Must include uppercase, lowercase, digits, and special characters
+	•	Audit Trail: Logs all user logins, CRUD actions, imports/exports
+	•	Encryption Ready: Supports optional encrypted backups
+	•	Data Hygiene: Sensitive fields cleared after use
+	•	⚠ Never commit data/invoices.db or credentials to public repos.
+
+⸻
+
+
+<details>
+<summary>📘 <b>Version History (click to expand)</b></summary>
+
+
+Version	Description	Key Fixes / Changes
+v0.1	Streamlit prototype	Manual entry, no persistence
+v0.2	Improved Streamlit UI	Added filters & Excel export
+v0.3	SQLite persistence	Accurate decimals + bulk import
+v1.0	PySide6 migration	Authentication, audit logs, UI overhaul
+
+</details>
+
+
+
+⸻
+
+
+<details>
+<summary>🧱 <b>Development Roadmap (click to expand)</b></summary>
+
+
+Short Term (1–3 months)
+	•	Role-based access control (RBAC)
+	•	Undo/restore & soft delete
+	•	Unit testing for core modules
+
+Mid Term (3–6 months)
+	•	REST API (FastAPI)
+	•	Encrypted DB backups
+	•	Enhanced PDF templates with branding
+
+Long Term (6–12+ months)
+	•	SSO / LDAP integration
+	•	Signed installers (PyInstaller)
+	•	Cloud sync & analytics dashboard
+
+</details>
+
+
+
+⸻
+
+🧰 Tech Stack
+
+Layer	Technology
+Frontend	PySide6 (Qt for Python)
+Backend	SQLite + Python
+Authentication	PBKDF2-HMAC-SHA256
+Reporting	ReportLab (PDF Export)
+Data Handling	pandas, decimal
+Environment	venv (Python Virtualenv)
+
+
+⸻
+
+🧑‍💻 Author
+
+👤 Anas Idris
+🛠 Software Engineer & Data Systems Developer
+🏢 Concorp Petroleum
+📫 LinkedIn | GitHub
+
+⸻
+
+⚖ License
+
+This project is licensed under the MIT License.
+You are free to use, modify, and distribute it with proper attribution.
+
+⸻
+
+⭐ Support & Feedback
+
+If you find this project useful, please ⭐ star the repo!
+Feedback and feature suggestions are welcome in the Issues section.
+
+⸻
